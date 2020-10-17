@@ -5,29 +5,19 @@ var connection = new amqp.Connection("amqp://localhost");
 
 export class Rabbitmq{
     private sender:any;  // Strong type
+    private queue:any;
     constructor(){
         let exchange = connection.declareExchange("ExchangeName");  // should come from register
-        let queue = connection.declareQueue("QueueName");        // should come from register
-        queue.bind(exchange);  
-        queue.activateConsumer(this.received);
+        this.queue = connection.declareQueue("QueueName");        // should come from register
+        this.queue.bind(exchange);  
         this.sender = exchange
-        this.send()
-    }
-    register(){
-
-    }
-    unregister(){
-
-    }
-    send(){
-        var msg2 = new amqp.Message("rnc");
-        this.sender.send(msg2)    
     }
 
-    received (message:any) { // should come from register
-        console.log("Message received: " + message.getContent());
-        // ack
+    register(responseHandler:any){
+        this.queue.activateConsumer(responseHandler);
     }
 
-    
+    send(message:amqp.Message){
+        this.sender.send(message)    
+    }
 }
