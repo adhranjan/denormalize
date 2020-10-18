@@ -16,25 +16,10 @@
   
 
 export const updated = (schema:any, options:any)=>{
-    // schema.virtual('updated').
-    //   get(function() { return updated; }).
-    //   set(function(v:any) { updated = v; });
-  
-    schema.post(['update'], function(next:Function, doc:any) {
-        // console.log("BEFORE:", origDocument)
-        console.log("AFTER:", this.toJSON().attrCache.Description)
-
-        // console.log({original} )
-        // console.log({a:        this.toJSON()        })
-        next();
-        // console.log(this);
-    //   if (!Array.isArray(docs)) {
-    //     docs = [docs];
-    //   }
-    //   const now = new Date();
-    //   for (const doc of docs) {
-    //     doc.loadedAt = now;
-    //   }
+    schema.post(['update'], (docs:any,d:any, a:any) =>{
+        // TODO: Trigger a rammit Mq
+        // TODO: Update Another Document via query
+        // TODO: Inject Message Queue, which ever user wants
     });
 
 }
