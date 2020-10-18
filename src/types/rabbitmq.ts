@@ -1,23 +1,23 @@
-import * as amqp from "amqp-ts";
+import{Queue, Exchange, Connection, Message} from "amqp-ts";
  
-var connection = new amqp.Connection("amqp://localhost");
+var connection = new Connection("amqp://localhost");
 
 
 export class Rabbitmq{
-    private sender:any;  // Strong type
-    private queue:any;
-    constructor(){
-        let exchange = connection.declareExchange("ExchangeName");  // should come from register
-        this.queue = connection.declareQueue("QueueName");        // should come from register
-        this.queue.bind(exchange);  
-        this.sender = exchange
+    private exchange:Exchange;
+    private queue:Queue;
+
+    constructor(exchangeRoute:string, queue:string){
+        this.exchange = connection.declareExchange(exchangeRoute);
+        this.queue = connection.declareQueue(queue);
+        this.queue.bind(this.exchange);  
     }
 
     register(responseHandler:any){
-        this.queue.activateConsumer(responseHandler);
+        this.queue.activateConsumer(responseHandler)
     }
 
-    send(message:amqp.Message){
-        this.sender.send(message)    
+    send(message:Message){
+        this.exchange.send(message)    
     }
 }

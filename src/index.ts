@@ -1,20 +1,15 @@
 import { Rabbitmq } from "./types/rabbitmq";
 import { Message } from "amqp-ts";
 
-let rmq = new Rabbitmq();
-let rmq1 = new Rabbitmq()
+let rmq = new Rabbitmq('a','a');
+let rmq1 = new Rabbitmq('a','a')
 
-/* 
-    in orderschema
-    usersUsercb = (updatedUser)=>{
-        let user = a.getContent()
-    }   
-*/
+
 rmq.register((a:Message)=>{
-    console.log('hiiiii');
     console.log(a.getContent());
+    a._channel.ack(a);
 })
 
 
-rmq1.send(new Message("hello world wow"));
+rmq1.send(new Message("hello world daws"));
 
