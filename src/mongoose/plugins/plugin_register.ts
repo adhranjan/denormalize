@@ -1,5 +1,9 @@
 import * as mongoose from 'mongoose'
+import * as _ from 'lodash'
+import { ActionTiming, UpdateMethods } from './constants';
 import { binder } from '../../helper/binder'
+import { Relative } from '../../interface/relative';
+
 // import { created } from './plugins/update';
 
 // TODO: export 
@@ -10,25 +14,27 @@ import { binder } from '../../helper/binder'
 
 export const  createPlugin = (
     schema:mongoose.Schema, 
-    related:Related,
-    method:
-        | "count"
-        | "find"
-        | "findOne"
-        | "findOneAndRemove"
-        | "findOneAndUpdate"
-        | "update"
-        | "updateOne"
-        | "updateMany",
-    todo:
-        | "pre"
-        | "post",
-    action:Function
+    related:Relative,
+    timings:ActionTiming[],
+    action:Function,
+    methods: UpdateMethods[]
     )=>{
-        if(todo === "pre"){
-            schema.pre(method, binder(action, related));
-        }else{
-            schema.post(method, binder(action, related));
+        const binded = binder(action, related);
+        const uniqueTiming = _.uniq(timings);
+        for (let method of methods){
+            for(let timing of uniqueTiming){
+                switch (timing){
+                    case ActionTiming.PRE:
+                        schema.pre(method,binded);
+                        break;
+                    case ActionTiming.POST:
+                        schema.post(method,binded);
+                        break;
+                    default:
+                        break;
+                }
+
+            }
         }
         return;
     }

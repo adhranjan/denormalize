@@ -1,7 +1,7 @@
 import {user, order} from './mongoose/model'
 
 async function test(){
-    await user.update({
+    await user.updateOne({
         name:"Ranj",
         lastName:"Adhikari"
     },{
@@ -10,7 +10,9 @@ async function test(){
         }
     });    
 }
-test();
+setTimeout(()=>{
+    test();
+},1000);
 
 // user.create({
 //     name:"Ranjan",
