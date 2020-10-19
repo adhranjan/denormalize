@@ -1,25 +1,23 @@
-// module.exports = function loadedAtPlugin(schema, options) {
-//     // schema.virtual('loadedAt').
-//     //   get(function() { return this._loadedAt; }).
-//     //   set(function(v) { this._loadedAt = v; });
-  
-//     // schema.post(['find', 'findOne'], function(docs) {
-//     //   if (!Array.isArray(docs)) {
-//     //     docs = [docs];
-//     //   }
-//     //   const now = new Date();
-//     //   for (const doc of docs) {
-//     //     doc.loadedAt = now;
-//     //   }
-//     // });
-//   };
-  
+import * as mongoose from 'mongoose'
 
-export const updated = (schema:any, options:any)=>{
-    schema.post(['update'], (docs:any,d:any, a:any) =>{
-        // TODO: Trigger a rammit Mq
-        // TODO: Update Another Document via query
-        // TODO: Inject Message Queue, which ever user wants
-    });
+export const  createPlugin = (schema:any, related:Related)=>{
+    schema.plugin(RegisterUpdate,related);
+}
 
+
+
+function bindLast(fn:any,options:any) {   
+    return function() {
+        Array.prototype.push.apply(arguments, [options]);
+        return fn.apply(this, arguments);
+    };
+}
+
+function onUpdate (related:Related){
+    const modifiedField = this.getUpdate()['$set'];
+    const setToOtherRelatives = modifiedField;
+}
+
+export const RegisterUpdate = (schema:mongoose.Schema, options:any)=>{
+    schema.pre('update', bindLast(onUpdate, options));
 }
