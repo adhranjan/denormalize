@@ -1,5 +1,11 @@
 import * as mongoose from 'mongoose'
 
+// TODO: export 
+// Post Update
+// Pre Update
+// Post Create
+// Pre Create
+
 export const  createPlugin = (
     schema:mongoose.Schema, 
     related:Related,
