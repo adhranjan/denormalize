@@ -1,5 +1,7 @@
+import { modifyRelativesOnUpdate } from "./plugins/update";
+
 const mongoose = require('mongoose');
-import {createPlugin} from './create_plugin'
+
 
 const conn = mongoose.createConnection('mongodb://localhost:27017/myapp');
 
@@ -8,7 +10,7 @@ const userSchema = new mongoose.Schema({
     lastName: String,
 });
 
-createPlugin(userSchema,
+modifyRelativesOnUpdate(userSchema,
   { 
     collection:"Order",
     query:{
@@ -18,8 +20,7 @@ createPlugin(userSchema,
       }
     }
   },
-  'update',
-  'post'
+  'post',
 );
   
 

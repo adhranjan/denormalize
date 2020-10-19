@@ -1,15 +1,16 @@
 import {user, order} from './mongoose/model'
 
-user.update({
-    name:"Ranj",
-    lastName:"Adhikari"
-},{
-    $set:{
-        name:"Ranj"
-    }
-}).then((d:any)=>{
-    console.log(d)
-})
+async function test(){
+    await user.update({
+        name:"Ranj",
+        lastName:"Adhikari"
+    },{
+        $set:{
+            lastName:"Ranjan Adhikari"
+        }
+    });    
+}
+test();
 
 // user.create({
 //     name:"Ranjan",
@@ -23,20 +24,3 @@ user.update({
 //         }
 //     })
 // })
-
-
-// import { Rabbitmq } from "./types/rabbitmq";
-// import { Message } from "amqp-ts";
-
-// let rmq = new Rabbitmq('a','a');
-// let rmq1 = new Rabbitmq('a','a')
-
-
-// rmq.register((a:Message)=>{
-//     console.log(a.getContent());
-//     a._channel.ack(a);
-// })
-
-
-// rmq1.send(new Message("hello world daws"));
-
