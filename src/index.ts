@@ -1,15 +1,28 @@
-import { Rabbitmq } from "./types/rabbitmq";
-import { Message } from "amqp-ts";
+import {user, order} from './mongoose/model'
 
-let rmq = new Rabbitmq('a','a');
-let rmq1 = new Rabbitmq('a','a')
+async function test(){
+    await user.updateOne({
+        name:"Ranj",
+        lastName:"Adhikari"
+    },{
+        $set:{
+            lastName:"Ranjan Adhikari"
+        }
+    });    
+}
+setTimeout(()=>{
+    test();
+},1000);
 
-
-rmq.register((a:Message)=>{
-    console.log(a.getContent());
-    a._channel.ack(a);
-})
-
-
-rmq1.send(new Message("hello world daws"));
-
+// user.create({
+//     name:"Ranjan",
+//     lastName:"Adhikari"
+// }).then((a:any)=>{
+//     order.create({
+//         orderId:1212,
+//         user:{
+//             name:"Ranjan",
+//             lastName:"Adhikari"
+//         }
+//     })
+// })
