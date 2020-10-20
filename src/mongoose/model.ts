@@ -22,7 +22,7 @@ const orderSchema = new mongoose.Schema({
   });
 
 modifyRelativesOnUpdate(userSchema,
-    { 
+    {
       schema:orderSchema,
       query:{
         user:{

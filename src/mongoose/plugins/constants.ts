@@ -9,3 +9,8 @@ export enum UpdateMethods {
     UPDATEONE =  "updateOne",
     UDPATEMANY =  "updateMany",
 }
+
+export enum ExeutionType{
+    RABBITMQ = 'rmq',
+    NODEJSPROCESS = 'samethread',
+}
