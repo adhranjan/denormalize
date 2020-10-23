@@ -4,14 +4,6 @@ import { ActionTiming, UpdateMethods } from './constants';
 import { binder } from '../../helper/binder'
 import { Relative } from '../../interface/relative';
 
-// import { created } from './plugins/update';
-
-// TODO: export 
-// Post Update
-// Pre Update
-// Post Create
-// Pre Create
-
 export const  createPlugin = (
     schema:mongoose.Schema, 
     related:Relative,

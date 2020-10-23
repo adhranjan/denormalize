@@ -6,10 +6,6 @@ export class Operation{
 
     }
     async execute(modifiedField:any, relative:Relative){
-        if(this.operator.async){
-            return this.operator.asyncdo(modifiedField,relative);
-        }else{
-            return await this.operator.do(modifiedField,relative);
-        }
+            return this.operator.operate(modifiedField,relative);
     }
 }

@@ -10,8 +10,7 @@ export function updated (updatedOrRelated: Relative & { n: number, nModified: nu
         relative = updatedOrRelated as Relative;
     }
     const modifiedField = this.getUpdate()['$set'];
-    const async = relative.execution?.async || false;
-    let executionType = relative.execution?.type || ExeutionType.NODEJSPROCESS;
+    let executionType = relative.execution || ExeutionType.NODEJSPROCESS;
 
     let operator:Operator;
     switch(executionType){
@@ -19,7 +18,7 @@ export function updated (updatedOrRelated: Relative & { n: number, nModified: nu
             operator = new RabbitMqExecution();
         break;
         case ExeutionType.NODEJSPROCESS:
-            operator = new NodeJsProcess(async);
+            operator = new NodeJsProcess();
         break;
         default:
             throw new Error(`${executionType} Not recognized, accepeted: ${Object.values(ExeutionType)}`)
