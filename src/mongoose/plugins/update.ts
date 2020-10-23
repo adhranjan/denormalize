@@ -31,8 +31,8 @@ export function updated (updatedOrRelated: Relative & { n: number, nModified: nu
 export const  modifyRelativesOnUpdate = (
     schema:mongoose.Schema,
     related:Relative,
-    timing:ActionTiming[], // TODO: Think this should be only one, PRE OR POST,
-    updateMethods:UpdateMethods[] = Object.values(UpdateMethods) // Tells in which condition queue to Trigger, post or pre event
+    updateMethods:UpdateMethods[] = Object.values(UpdateMethods), // Tells in which condition queue to Trigger, post or pre event
+    timing:ActionTiming = ActionTiming.POST,
     )=>{
     createPlugin(schema, related, timing, updated, updateMethods);
     return;

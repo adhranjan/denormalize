@@ -15,25 +15,21 @@ import { Relative } from '../../interface/relative';
 export const  createPlugin = (
     schema:mongoose.Schema, 
     related:Relative,
-    timings:ActionTiming[],
+    timing:ActionTiming,
     action:Function,
     methods: UpdateMethods[]
     )=>{
         const binded = binder(action, related);
-        const uniqueTiming = _.uniq(timings);
         for (let method of methods){
-            for(let timing of uniqueTiming){
-                switch (timing){
-                    case ActionTiming.PRE:
-                        schema.pre(method,binded);
-                        break;
-                    case ActionTiming.POST:
-                        schema.post(method,binded);
-                        break;
-                    default:
-                        break;
-                }
-
+            switch (timing){
+                case ActionTiming.PRE:
+                    schema.pre(method,binded);
+                    break;
+                case ActionTiming.POST:
+                    schema.post(method,binded);
+                    break;
+                default:
+                    break;
             }
         }
         return;

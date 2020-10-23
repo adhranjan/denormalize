@@ -31,8 +31,8 @@ modifyRelativesOnUpdate(userSchema,
         }
       }
     },
-    [ActionTiming.POST],
-    [UpdateMethods.UPDATE, UpdateMethods.UPDATEONE]
+    [UpdateMethods.UPDATE, UpdateMethods.UPDATEONE],
+    ActionTiming.POST
 );
 
 export const user = conn.model('user', userSchema);
