@@ -11,20 +11,18 @@ function makeid(length:number) {
  
  
 async function test(){
-    await user.update({
-        name:"Ranj"
+    await user.updateMany({
     },{
         $set:{
-            lastName:makeid(5)
+            name: 'Ranjan  v2333',
+            lastName:makeid(5),
         }
     }).then((d:any) => {
         console.log(d);
     }); 
 }
 setTimeout(()=>{
-    console.log('111111111111111111')
     test();
-    console.log('22222222222222222')
 },5000);
 
 // user.create({
