@@ -1,4 +1,3 @@
-import * as mongoose from 'mongoose'
 import { createPlugin } from "./plugin_register";
 import { UpdateMethods, ExeutionType } from './constants';
 import { RelativeModel, ThisModel } from '../../interface/relation';

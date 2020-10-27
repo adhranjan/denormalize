@@ -18,7 +18,7 @@ export const  createPlugin = (
     )=>{
         const binded = binder(action, related);
         for (let method of methods){
-            thismodel.schema.pre(method, getCurrentValueBeforeUpdate) // Set current Value before doing an update, gets promise
+            thismodel.schema.pre(method, getCurrentValueBeforeUpdate) // Set current Value before doing an update, gets array of value
             thismodel.schema.post(method,binded);
         }
         return;

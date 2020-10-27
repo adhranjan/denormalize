@@ -14,11 +14,12 @@ async function test(){
     await user.updateMany({
     },{
         $set:{
-            name: 'Ranjan  v2333',
+            age:22,
+            name: makeid(5),
             lastName:makeid(5),
         }
     }).then((d:any) => {
-        console.log(d);
+        console.log({d});
     }); 
 }
 setTimeout(()=>{

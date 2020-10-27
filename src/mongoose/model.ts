@@ -7,6 +7,7 @@ import{ createConnection, Schema, } from 'mongoose'
 const conn = createConnection('mongodb://localhost:27017/myapp');
 
 const userSchema = new Schema({
+    age:Number,
     name:  
     {
       type:String,
@@ -25,20 +26,19 @@ const orderSchema = new Schema({
   
 
 modifyRelativesOnUpdate({
-    name:"user",
+    connectorName:"user",
     schema:userSchema
   },
   {
-    name:"order",
+    connectorName:"order",
     schema:orderSchema,
     query:{
       user:{
-      name:String,
-      last_name:String
+        name:"name"
       }
     }
   },
-  [UpdateMethods.UPDATE, UpdateMethods.UDPATEMANY]
+  [UpdateMethods.UPDATEONE, UpdateMethods.UDPATEMANY]
 );
 
 export const user = conn.model('user', userSchema);
