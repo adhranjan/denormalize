@@ -20,25 +20,57 @@ const orderSchema = new Schema({
     user:{
         name:String,
         last_name:String
-    }
+    },
+    likes:[{type:String}], // TODO:1, make  modifyRelativesOnUpdate fesible for this
+    likeDetails:[{
+      name:{type:String}
+    }], // TODO:2, make  modifyRelativesOnUpdate fesible for this
   });
   
 
-modifyRelativesOnUpdate({
-    connectorName:"user",
-    schema:userSchema
-  },
-  {
-    connectorName:"order",
-    schema:orderSchema,
-    query:{
-      user:{
-        name:"name"
-      }
+// modifyRelativesOnUpdate({ // Done
+//     connectorName:"user",
+//     schema:userSchema
+//   },
+//   {
+//     connectorName:"order",
+//     schema:orderSchema,
+//     query:{
+//       user:{
+//         name:"name"
+//       }
+//     }
+//   },
+// );
+
+modifyRelativesOnUpdate({ // WIP
+connectorName:"user",
+  schema:userSchema
+},
+{
+  connectorName:"order",
+  schema:orderSchema,
+  query:{
+    "likes[]":"name"
     }
   },
-  [UpdateMethods.UPDATEONE, UpdateMethods.UDPATEMANY]
 );
+
+
+
+// modifyRelativesOnUpdate({ // Pending
+//   connectorName:"user",
+//     schema:userSchema
+//   },
+//   {
+//     connectorName:"order",
+//     schema:orderSchema,
+//     query:{
+//        "likeDetails[].name":"name"
+//       }
+//     },
+//   );
+  
 
 export const user = model('user', userSchema);
 export const order = model('order', orderSchema);
