@@ -1,40 +1,25 @@
-import * as mongoose from 'mongoose'
-import * as _ from 'lodash'
-import { ActionTiming, UpdateMethods } from './constants';
+import { UpdateMethods } from './constants';
 import { binder } from '../../helper/binder'
-import { Relative } from '../../interface/relative';
+import { RelativeModel, ThisModel } from '../../interface/relation';
 
-// import { created } from './plugins/update';
+const getCurrentValueBeforeUpdate =  async function(next:Function,error:any) {
+    let that = (this as any);
+    Object.assign(this, { previousState:await that.model.find(that._conditions)})
+    next();
+};
+  
 
-// TODO: export 
-// Post Update
-// Pre Update
-// Post Create
-// Pre Create
 
 export const  createPlugin = (
-    schema:mongoose.Schema, 
-    related:Relative,
-    timings:ActionTiming[],
+    thismodel:ThisModel, 
+    related:RelativeModel,
     action:Function,
     methods: UpdateMethods[]
     )=>{
         const binded = binder(action, related);
-        const uniqueTiming = _.uniq(timings);
         for (let method of methods){
-            for(let timing of uniqueTiming){
-                switch (timing){
-                    case ActionTiming.PRE:
-                        schema.pre(method,binded);
-                        break;
-                    case ActionTiming.POST:
-                        schema.post(method,binded);
-                        break;
-                    default:
-                        break;
-                }
-
-            }
+            thismodel.schema.pre(method, getCurrentValueBeforeUpdate) // Set current Value before doing an update, gets array of value
+            thismodel.schema.post(method,binded);
         }
         return;
     }

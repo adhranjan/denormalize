@@ -1,15 +1,11 @@
 import { Operator } from "./operator";
-import { Relative } from "../../interface/relative";
+import { RelativeModel } from "../../interface/relation";
 
 export class Operation{
     constructor(private operator:Operator){
 
     }
-    async execute(modifiedField:any, relative:Relative){
-        if(this.operator.async){
-            return this.operator.asyncdo(modifiedField,relative);
-        }else{
-            return await this.operator.do(modifiedField,relative);
-        }
+    async execute(modifiedField:any, relative:RelativeModel, previousState:any[]){
+        return this.operator.operate(modifiedField,relative, previousState);
     }
 }

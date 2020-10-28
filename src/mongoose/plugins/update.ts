@@ -1,17 +1,16 @@
-import * as mongoose from 'mongoose'
 import { createPlugin } from "./plugin_register";
-import { ActionTiming, UpdateMethods, ExeutionType } from './constants';
-import { Relative } from '../../interface/relative';
+import { UpdateMethods, ExeutionType } from './constants';
+import { RelativeModel, ThisModel } from '../../interface/relation';
 import { Operation } from './operation';
 import { RabbitMqExecution, NodeJsProcess, Operator } from './operator';
 
-export function updated (updatedOrRelated: Relative & { n: number, nModified: number, ok: number }, relative: Relative){
+export function updated (updatedOrRelated: RelativeModel & { n: number, nModified: number, ok: number }, relative: RelativeModel){
     if(!relative){
-        relative = updatedOrRelated as Relative;
+        relative = updatedOrRelated as RelativeModel;
     }
-    const modifiedField = this.getUpdate()['$set'];
-    const async = relative.execution?.async || false;
-    let executionType = relative.execution?.type || ExeutionType.NODEJSPROCESS;
+    const modifiedField = this.getUpdate()['$set'];    
+    let executionType = relative.execution || ExeutionType.NODEJSPROCESS;
+    let previousState = this.previousState;
 
     let operator:Operator;
     switch(executionType){
@@ -19,21 +18,20 @@ export function updated (updatedOrRelated: Relative & { n: number, nModified: nu
             operator = new RabbitMqExecution();
         break;
         case ExeutionType.NODEJSPROCESS:
-            operator = new NodeJsProcess(async);
+            operator = new NodeJsProcess();
         break;
         default:
             throw new Error(`${executionType} Not recognized, accepeted: ${Object.values(ExeutionType)}`)
     }
-    new Operation(operator).execute(modifiedField, relative)
+    new Operation(operator).execute(modifiedField, relative, previousState)
 }
 
 
 export const  modifyRelativesOnUpdate = (
-    schema:mongoose.Schema,
-    related:Relative,
-    timing:ActionTiming[], // TODO: Think this should be only one, PRE OR POST,
-    updateMethods:UpdateMethods[] = Object.values(UpdateMethods) // Tells in which condition queue to Trigger, post or pre event
+    thisModel:ThisModel,
+    related:RelativeModel,
+    updateMethods:UpdateMethods[] = Object.values(UpdateMethods), // Tells in which condition queue to Trigger, post or pre event
     )=>{
-    createPlugin(schema, related, timing, updated, updateMethods);
+    createPlugin(thisModel, related, updated, updateMethods);
     return;
 }

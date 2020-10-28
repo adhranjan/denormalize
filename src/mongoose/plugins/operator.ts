@@ -1,36 +1,43 @@
-import { Relative } from "../../interface/relative";
+import { RelativeModel } from "../../interface/relation";
+import * as mongoose from 'mongoose'
+import * as  dot from 'dot-object';
 
 export abstract class Operator{
-    abstract async:boolean;
-    protected abstract doing(modifiedField:any, relative:Relative):void;
-
-    do(modifiedField:any, relative:Relative):void{
-        return this.doing(modifiedField, relative);
-    }
-
-    async asyncdo(modifiedField:any, relative:Relative):Promise<void>{
-        return await this.doing(modifiedField, relative);
-    };
+    abstract operate(modifiedField:any, relative:RelativeModel, previousState:any[]):void;
 }
-
 
 export class RabbitMqExecution extends Operator{
     // ExeutionType.RABBITMQ 
-    async = false;
-
-    doing(modifiedField:any, relative:Relative){
+    operate(modifiedField:any, relative:RelativeModel, previousState:any[]){
 
     }
 }
 
 export class NodeJsProcess extends Operator{
     // ExeutionType.NODEJSPROCESS
-    async = false;
-    constructor(async:boolean){
-        super();
-        this.async = async;
-    }
-    doing(modifiedField:any, relative:Relative){
-        console.log(modifiedField, relative);
+    operate(modifiedField:any, relative:RelativeModel, previousState:any[]){
+        let relativeModel = mongoose.model(relative.connectorName);     
+        let relativeMap = dot.dot(relative.query);
+        let setQuery = {} as any;
+
+        for (const [key, referedAs] of Object.entries(relativeMap)) {
+            setQuery[key] = modifiedField[referedAs as string];
+        }
+
+        return Promise.all(previousState.map((prevs)=>{
+            let singleQuery = {} as any;
+            for (const [key, referedAs] of Object.entries(relativeMap)) {
+                let value = prevs[referedAs as string];
+                singleQuery[key] =value
+            }            
+            return relativeModel.updateMany(
+                {
+                    ...dot.object(singleQuery)
+                },{
+                $set:{
+                    ...setQuery
+                } 
+            })
+        }));
     }
 }
