@@ -1,8 +1,6 @@
 import { RelativeModel } from "../../interface/relation";
 import * as mongoose from 'mongoose'
-import { any } from "bluebird";
-import e from "express";
-var dot = require('dot-object');
+import * as  dot from 'dot-object';
 
 export abstract class Operator{
     abstract operate(modifiedField:any, relative:RelativeModel, previousState:any[]):void;
@@ -19,27 +17,27 @@ export class NodeJsProcess extends Operator{
     // ExeutionType.NODEJSPROCESS
     operate(modifiedField:any, relative:RelativeModel, previousState:any[]){
         let relativeModel = mongoose.model(relative.connectorName);     
-        console.log({relativeModel})
-  
-        let updates = previousState.map((prevs)=>{
-            let a = dot.dot(relative.query);
-            let singleQuery = {} as any;
-            for (const [key, referedAs] of Object.entries(a)) {
-                let value = prevs[referedAs as string];
-                singleQuery[key] =value;
-            }
+        let relativeMap = dot.dot(relative.query);
+        let setQuery = {} as any;
 
-            return relativeModel.update(
+        for (const [key, referedAs] of Object.entries(relativeMap)) {
+            setQuery[key] = modifiedField[referedAs as string];
+        }
+
+        return Promise.all(previousState.map((prevs)=>{
+            let singleQuery = {} as any;
+            for (const [key, referedAs] of Object.entries(relativeMap)) {
+                let value = prevs[referedAs as string];
+                singleQuery[key] =value
+            }            
+            return relativeModel.updateMany(
                 {
                     ...dot.object(singleQuery)
                 },{
-                $set: {"orderId":"damnnnnnnn"} // TODO:Dynamic 
+                $set:{
+                    ...setQuery
+                } 
             })
-        })
-        Promise.all(updates).then((res)=>{
-            console.log(res)
-        }).catch((e)=>{
-            console.log(e)
-        })
+        }));
     }
 }

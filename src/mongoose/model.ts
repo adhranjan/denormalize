@@ -3,6 +3,7 @@ import { UpdateMethods } from "./plugins/constants";
 
 import{ connect, Schema, model} from 'mongoose' 
 
+connect("mongodb://localhost:27017/myapp");
 // TODO: make fexible with all the way https://stackoverflow.com/questions/12806559/mongoose-model-vs-connection-model-vs-model-model
 const userSchema = new Schema({
     age:Number,

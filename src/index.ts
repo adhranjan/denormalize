@@ -11,11 +11,12 @@ function makeid(length:number) {
 
  async function test(){
     await user.updateMany({
+        name:"A403PNqL"
     },{
         $set:{
             age:22,
-            name: makeid(5),
-            lastName:makeid(5),
+            name: "Ranjan",
+            lastName:"Adhikari",
         }
     }).then((d:any) => {
         console.log({d});
@@ -26,15 +27,30 @@ setTimeout(()=>{
     test();
 },2000);
 
-// user.create({
-//     name:"Ranjan",
-//     lastName:"Adhikari"
-// }).then((a:any)=>{
-//     order.create({
-//         orderId:1212,
-//         user:{
-//             name:"Ranjan",
-//             lastName:"Adhikari"
+
+
+
+// async function create(){
+//     for(let i=0; i!==10; i++){
+//         let name = makeid(8);
+//         let lastname = makeid(5);
+        
+//         await user.create({
+//             name:name,
+//             lastName:lastname
+//         })
+        
+//         for(let j=0; j!==i;j++){
+//             order.create({
+//                 orderId:makeid(5),
+//                 user:{
+//                     name:name,
+//                     lastName:name
+//                 }
+//             })
 //         }
-//     })
-// })
+//         }
+// }
+
+
+// create();
