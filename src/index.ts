@@ -8,9 +8,8 @@ function makeid(length:number) {
     }
     return result;
  }
- 
- 
-async function test(){
+
+ async function test(){
     await user.updateMany({
     },{
         $set:{
@@ -22,9 +21,10 @@ async function test(){
         console.log({d});
     }); 
 }
+
 setTimeout(()=>{
     test();
-},5000);
+},2000);
 
 // user.create({
 //     name:"Ranjan",

@@ -1,11 +1,9 @@
 import { modifyRelativesOnUpdate } from "./plugins/update";
 import { UpdateMethods } from "./plugins/constants";
 
-import{ createConnection, Schema, } from 'mongoose'
+import{ connect, Schema, model} from 'mongoose' 
 
-
-const conn = createConnection('mongodb://localhost:27017/myapp');
-
+// TODO: make fexible with all the way https://stackoverflow.com/questions/12806559/mongoose-model-vs-connection-model-vs-model-model
 const userSchema = new Schema({
     age:Number,
     name:  
@@ -41,6 +39,5 @@ modifyRelativesOnUpdate({
   [UpdateMethods.UPDATEONE, UpdateMethods.UDPATEMANY]
 );
 
-export const user = conn.model('user', userSchema);
-export const order = conn.model('order', orderSchema);
-
+export const user = model('user', userSchema);
+export const order = model('order', orderSchema);
