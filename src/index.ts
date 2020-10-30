@@ -10,14 +10,21 @@ function makeid(length:number) {
  }
 
  async function test(){
-    await user.updateMany({
-        name:"A403PNqL"
+    await user.update({
+        name:"HnQlaaPq"
     },{
         $set:{
             age:22,
-            name: "Ranjan",
-            lastName:"Adhikari",
+            name: "HnQlaaPq1",
         }
+
+    //     name:"JbJxOkQV"
+    // },{
+    //     $set:{
+    //         age:22,
+    //         name: "ranjan",
+    //     }
+
     }).then((d:any) => {
         console.log({d});
     }); 
@@ -31,10 +38,11 @@ setTimeout(()=>{
 
 
 // async function create(){
+//     let likes = [];
 //     for(let i=0; i!==10; i++){
 //         let name = makeid(8);
 //         let lastname = makeid(5);
-        
+//         likes.push(name);
 //         await user.create({
 //             name:name,
 //             lastName:lastname
@@ -45,8 +53,9 @@ setTimeout(()=>{
 //                 orderId:makeid(5),
 //                 user:{
 //                     name:name,
-//                     lastName:name
-//                 }
+//                     lastName:name,
+//                 },
+//                 likes
 //             })
 //         }
 //         }
