@@ -21,29 +21,29 @@ const orderSchema = new Schema({
         name:String,
         last_name:String
     },
-    likes:[{type:String}], // TODO:1, make  modifyRelativesOnUpdate fesible for this
+    likes:[{type:String}],
     likeDetails:[{
       name:{type:String}
-    }], // TODO:2, make  modifyRelativesOnUpdate fesible for this
+    }], // TODO:, make  modifyRelativesOnUpdate fesible for this
   });
   
 
-// modifyRelativesOnUpdate({ // Done
-//     connectorName:"user",
-//     schema:userSchema
-//   },
-//   {
-//     connectorName:"order",
-//     schema:orderSchema,
-//     query:{
-//       user:{
-//         name:"name"
-//       }
-//     }
-//   },
-// );
+modifyRelativesOnUpdate({ // Done
+    connectorName:"user",
+    schema:userSchema
+  },
+  {
+    connectorName:"order",
+    schema:orderSchema,
+    query:{
+      user:{
+        name:"name"
+      }
+    }
+  },
+);
 
-modifyRelativesOnUpdate({ // WIP
+modifyRelativesOnUpdate({ // Done
 connectorName:"user",
   schema:userSchema
 },
@@ -58,7 +58,7 @@ connectorName:"user",
 
 
 
-// modifyRelativesOnUpdate({ // Pending
+// modifyRelativesOnUpdate({ // WIP
 //   connectorName:"user",
 //     schema:userSchema
 //   },
